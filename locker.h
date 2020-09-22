@@ -1,3 +1,8 @@
+/*
+将进程间同步的函数
+信号量、互斥锁、条件变量封装成class
+*/
+
 #ifndef LOCKER_H
 #define LOCKER_H
 
