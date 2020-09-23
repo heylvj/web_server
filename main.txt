@@ -1,0 +1,26 @@
+main 函数利用epoll监听事件;
+初始化了线程池 threadpoll<http_conn*> *poll;
+创建了数组http_conn[] users;
+http_conn 类的作用是处理单个的客户端连接
+
+当client发送connect, epoll监听到连接请求, 
+建立连接后将sockfd分配给一个http_conn, 
+http_conn会将sockfd加入到epoll监听集
+当sockfd有消息到达，就会被epoll监听到POLLIN事件,
+epoll会把这个有消息到达的http_conn加入到线程池poll的工作队列等待处理
+
+工作队列的worker拿到消息之后会调用http_conn->process进行处理, 
+处理结束后该http_conn 被回收到users数组, 等待新的任务.
+
+
+http_conn->process : process_read分解http请求, 
+将分解结果 HTTP_CODE 传递给process_write函数, 
+该函数根据code组织应答报文,报文组织好后发出EPOLLOUT信号,
+随后将报文发出
+
+
+
+
+
+
+
